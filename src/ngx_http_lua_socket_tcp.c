@@ -183,6 +183,7 @@ enum {
     NGX_HTTP_LUA_SOCKOPT_TCP_NODELAY,
     NGX_HTTP_LUA_SOCKOPT_SNDBUF,
     NGX_HTTP_LUA_SOCKOPT_RCVBUF,
+    NGX_HTTP_LUA_SOCKOPT_TCP_MAXSEG,
 };
 
 
@@ -6631,6 +6632,10 @@ ngx_http_lua_ffi_socket_tcp_getoption(ngx_http_lua_socket_tcp_upstream_t *u,
         rc = getsockopt(fd, SOL_SOCKET, SO_SNDBUF, (void *) val, &len);
         break;
 
+    case NGX_HTTP_LUA_SOCKOPT_TCP_MAXSEG:
+        rc = getsockopt(fd, SOL_SOCKET, TCP_MAXSEG, (void *) val, &len);
+        break;
+
     default:
         *errlen = ngx_snprintf(err, *errlen, "unsupported option %d", option)
                   - err;
@@ -6690,6 +6695,11 @@ ngx_http_lua_ffi_socket_tcp_setoption(ngx_http_lua_socket_tcp_upstream_t *u,
 
     case NGX_HTTP_LUA_SOCKOPT_RCVBUF:
         rc = setsockopt(fd, SOL_SOCKET, SO_SNDBUF,
+                        (const void *) &val, len);
+        break;
+
+    case NGX_HTTP_LUA_SOCKOPT_TCP_MAXSEG:
+        rc = setsockopt(fd, SOL_SOCKET, TCP_MAXSEG,
                         (const void *) &val, len);
         break;
 
