@@ -184,6 +184,7 @@ enum {
     NGX_HTTP_LUA_SOCKOPT_SNDBUF,
     NGX_HTTP_LUA_SOCKOPT_RCVBUF,
     NGX_HTTP_LUA_SOCKOPT_TCP_MAXSEG,
+    NGX_HTTP_LUA_SOCKOPT_IP_MTU,
 };
 
 
@@ -6634,6 +6635,10 @@ ngx_http_lua_ffi_socket_tcp_getoption(ngx_http_lua_socket_tcp_upstream_t *u,
 
     case NGX_HTTP_LUA_SOCKOPT_TCP_MAXSEG:
         rc = getsockopt(fd, SOL_SOCKET, TCP_MAXSEG, (void *) val, &len);
+        break;
+
+    case NGX_HTTP_LUA_SOCKOPT_IP_MTU:
+        rc = getsockopt(fd, SOL_SOCKET, IP_MTU, (void *) val, &len);
         break;
 
     default:
